@@ -13,7 +13,7 @@ fn main() {
     let num1 = get_input("Enter number: ");
     let num1 = num1.parse::<f64>().unwrap();
     // Operator selection
-    let operator = get_input("Choose operator: +, -, *, /, ^, >, >=, <, <=, !");
+    let operator = get_input("Choose operator: +, -, *, /, ^, >, >=, <, <=, !: ");
     use equations::Operator::*;
     let operator = match operator.trim() {
         "+" => Add,
