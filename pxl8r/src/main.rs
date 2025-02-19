@@ -2,16 +2,6 @@ use image::ImageReader;
 use image::imageops::FilterType;
 use std::path::Path;
 use std::io::Write;
-enum ImageOptions {
-    Resize,
-} impl ImageOptions {
-    fn edit_option(&self) -> ImageOptions {
-            use ImageOptions::*;
-            match self {
-                Resize => Resize,
-            }
-        }
-}
 fn get_input(prompt: &str) -> String {
     print!("{}", prompt);
     std::io::stdout().flush().unwrap();
@@ -20,8 +10,13 @@ fn get_input(prompt: &str) -> String {
     input.trim().to_string()
 }
 fn main() {
-    let image = ImageReader::open(Path::new("dnd_profile_pic.webp")).unwrap().decode().unwrap();
-    let image = image.resize(200, 200, FilterType::Nearest);
+    let image_path = get_input("Enter the path to the image: ");
+    let image = ImageReader::open(image_path).unwrap().decode().unwrap();
+    let width = get_input("Enter the width: ");
+    let height = get_input("Enter the height: ");
+    let image = image.resize(width.trim().parse().unwrap(), height.trim().parse().unwrap(), FilterType::Nearest);
+    let new_path = get_input("Enter the path to save the new image: ");
     let new_image = image.resize(1024, 1024, FilterType::Nearest);
-    new_image.save("dnd_profile_pic_resized.png").unwrap();
+    new_image.save(new_path).unwrap();
+    println!("New image successfully created");
 }
