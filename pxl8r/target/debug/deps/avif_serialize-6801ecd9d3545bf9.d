@@ -1,0 +1,8 @@
+/Users/matthewdowd/GitHub/rust-projects/pxl8r/target/debug/deps/libavif_serialize-6801ecd9d3545bf9.rmeta: /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs
+
+/Users/matthewdowd/GitHub/rust-projects/pxl8r/target/debug/deps/avif_serialize-6801ecd9d3545bf9.d: /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs
+
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/lib.rs:
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/boxes.rs:
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/constants.rs:
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-6f17d22bba15001f/avif-serialize-0.8.2/src/writer.rs:
