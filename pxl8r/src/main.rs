@@ -1,4 +1,4 @@
-use image::ImageReader;
+use image::{GenericImageView, ImageReader};
 use image::imageops::FilterType;
 use std::path::Path;
 use std::io::Write;
@@ -12,11 +12,12 @@ fn get_input(prompt: &str) -> String {
 fn main() {
     let image_path = get_input("Enter the path to the image: ");
     let image = ImageReader::open(image_path).unwrap().decode().unwrap();
-    let width = get_input("Enter the width: ");
-    let height = get_input("Enter the height: ");
-    let image = image.resize(width.trim().parse().unwrap(), height.trim().parse().unwrap(), FilterType::Nearest);
+    let (original_width, original_height) = image.dimensions();
+    let width = get_input("Enter the width: ").trim().parse().unwrap();
+    let height = get_input("Enter the height: ").trim().parse().unwrap();
+    let image = image.resize(width, height, FilterType::Nearest);
     let new_path = get_input("Enter the path to save the new image: ");
-    let new_image = image.resize(1024, 1024, FilterType::Nearest);
+    let new_image = image.resize(original_width, original_height, FilterType::Nearest);
     new_image.save(new_path).unwrap();
     println!("New image successfully created");
 }

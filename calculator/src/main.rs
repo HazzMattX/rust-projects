@@ -10,8 +10,7 @@ fn get_input(prompt: &str) -> String {
 }
 fn main() {
     // First number input
-    let num1 = get_input("Enter number: ");
-    let num1 = num1.parse::<f64>().unwrap();
+    let num1 = get_input("Enter number: ").trim().parse().unwrap();
     // Operator selection
     let operator = get_input("Choose operator: +, -, *, /, ^, >, >=, <, <=, !: ");
     use equations::Operator::*;
@@ -34,9 +33,9 @@ fn main() {
     let num2 = match operator {
         Factorial => None,
         _ => {
-            let num2 = get_input("Enter second number: ");
-            Some(num2.parse::<f64>().unwrap())
-        }
+            let num2 = get_input("Enter second number: ").trim().parse().unwrap();
+            Some(num2)
+        },
     };
     let result: f64 = Operator::calculate(operator, num1, num2);
     println!("{result}");
