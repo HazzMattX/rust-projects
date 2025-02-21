@@ -1,10 +1,9 @@
-use image::{DynamicImage, GenericImageView, ImageReader};
+use image::{DynamicImage, GenericImageView, ImageReader, ExtendedColorType};
 use image::imageops::FilterType::Nearest;
-use std::path::Path;
-use std::io::Write;
-use std::f32::INFINITY;
+use std::{path::Path, io::Write, f32::INFINITY};
 use anyhow::Context;
-use image::ExtendedColorType;
+use once_cell::sync::Lazy;
+
 struct Color {
     r: u8,
     g: u8,
@@ -33,7 +32,25 @@ impl From<&[u8; 3]> for Color {
         }
     }
 }
-fn map_to_palette(orig: Color, palette: &Vec<Color>) -> (Color, QuantizationError) {
+static PALETTE: Lazy<Vec<Color>> = Lazy::new(|| vec![
+    Color::from(0x000000),
+    Color::from(0xf50f27),
+    Color::from(0xf56c3f),
+    Color::from(0xffffff),
+    Color::from(0x004785),
+    Color::from(0x0395b1),
+    Color::from(0x36eb8f),
+    Color::from(0xabffa8),
+    Color::from(0x8f2700),
+    Color::from(0xff8f15),
+    Color::from(0xffec3c),
+    Color::from(0xe3fdaf),
+    Color::from(0x2d006a),
+    Color::from(0x0003f5),
+    Color::from(0x6ed1f5),
+    Color::from(0xadffca),
+]);
+fn map_to_palette2(orig: Color, palette: &Vec<Color>) -> (Color, QuantizationError) {
     let mut closest = &palette[0];
     let mut min_distance = INFINITY;
     for color in palette {
@@ -52,28 +69,47 @@ fn map_to_palette(orig: Color, palette: &Vec<Color>) -> (Color, QuantizationErro
     };
     (Color { r: closest.r, g: closest.g, b: closest.b }, qe)
 }
-fn dither(image: &image::DynamicImage) -> anyhow::Result<DynamicImage> {
+fn map_to_palette1(orig: Color, palette: &Vec<Color>) -> Color {
+    let mut closest = &palette[0];
+    let mut min_distance = INFINITY;
+    for color in palette {
+        let distance = (orig.r as f32 - color.r as f32).powi(2) +
+                       (orig.g as f32 - color.g as f32).powi(2) +
+                       (orig.b as f32 - color.b as f32).powi(2);
+        if distance < min_distance {
+            closest = color;
+            min_distance = distance;
+        }
+    }
+    Color { r: closest.r, g: closest.g, b: closest.b }
+}
+fn dither1(image: &image::DynamicImage) -> anyhow::Result<()> {
     let image = image.to_rgb8();
     let (width, height) = image.dimensions();
     let mut buffer = image.into_raw();
-    let palette = vec![
-        Color::from(0x000000),
-        Color::from(0xf50f27),
-        Color::from(0xf56c3f),
-        Color::from(0xffffff),
-        Color::from(0x004785),
-        Color::from(0x0395b1),
-        Color::from(0x36eb8f),
-        Color::from(0xabffa8),
-        Color::from(0x8f2700),
-        Color::from(0xff8f15),
-        Color::from(0xffec3c),
-        Color::from(0xe3fdaf),
-        Color::from(0x2d006a),
-        Color::from(0x0003f5),
-        Color::from(0x6ed1f5),
-        Color::from(0xadffca),
-    ];
+    for y in 0..height {
+        for x in 0..width {
+            let i = ((y * width + x) * 3) as usize;
+            let pixel = Color {
+                r: buffer[i],
+                g: buffer[i + 1],
+                b: buffer[i + 2],
+            };
+            let new_color = map_to_palette1(pixel, &PALETTE);
+            buffer[i] = new_color.r;
+            buffer[i + 1] = new_color.g;
+            buffer[i + 2] = new_color.b;
+        }
+    }
+    let output = get_input("Enter the output path: ");
+    image::save_buffer(&output, &buffer, width, height, ExtendedColorType::Rgb8)
+        .context(format!("Failed to save output image: {}", output))?;
+    Ok(())
+}
+fn dither2(image: &image::DynamicImage) -> anyhow::Result<DynamicImage> {
+    let image = image.to_rgb8();
+    let (width, height) = image.dimensions();
+    let mut buffer = image.into_raw();
     let floyd_steinberg: [[f32; 3]; 2] = [
         [0.0, 7.0 / 16.0, 0.0],
         [3.0 / 16.0, 5.0 / 16.0, 1.0 / 16.0]
@@ -86,7 +122,7 @@ fn dither(image: &image::DynamicImage) -> anyhow::Result<DynamicImage> {
                 g: buffer[i + 1],
                 b: buffer[i + 2],
             };
-            let (new_color, qe) = map_to_palette(pixel, &palette);
+            let (new_color, qe) = map_to_palette2(pixel, &PALETTE);
             buffer[i] = new_color.r;
             buffer[i + 1] = new_color.g;
             buffer[i + 2] = new_color.b;
@@ -107,7 +143,6 @@ fn dither(image: &image::DynamicImage) -> anyhow::Result<DynamicImage> {
             }
         }
     }
-
     let output = get_input("Enter the output path: ");
     image::save_buffer(&output, &buffer, width, height, ExtendedColorType::Rgb8)
         .context(format!("Failed to save output image: {}", output))?;
@@ -125,7 +160,7 @@ fn get_input(prompt: &str) -> String {
     std::io::stdin().read_line(&mut input).unwrap();
     input.trim().to_string()
 }
-fn resize(image: &image::DynamicImage) -> anyhow::Result<image::DynamicImage> {
+fn resize(image: &image::DynamicImage) -> anyhow::Result<DynamicImage> {
     let (original_width, original_height) = image.dimensions();
     let width = get_input("Enter the width: ").trim().parse().unwrap();
     let height = get_input("Enter the height: ").trim().parse().unwrap();
@@ -145,10 +180,11 @@ fn main() -> anyhow::Result<()> {
 
     let edit_options = get_input("Enter the edit options: ");
     match edit_options.as_str() {
-        "resize" => resize(&image),
-        "dither" => dither(&image),
-        _ => Ok(image)
-    }?;
+        "resize" => { resize(&image)?; },
+        "dither1" => { dither1(&image)?; },
+        "dither2" => { dither2(&image)?; },
+        _ => { }
+    };
     println!("New image successfully created");
     Ok(())
 }
