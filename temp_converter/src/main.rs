@@ -29,6 +29,7 @@ fn main() {
     let number: f64 = get_input("Please enter a number\n")
     .trim().parse().unwrap_or(0.0);
 let scale;
+// Chooses conversion
 use TemperatureScale::*;
 let convert = get_input("Choose temperature unit\n");
 let convert: TemperatureScale = match convert.trim() {

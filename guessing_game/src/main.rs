@@ -10,6 +10,7 @@ fn get_input(prompt: &str) -> String {
 fn play_game() {
     println!("Do you want to play a game?");
     let random_number: u8 = rand::thread_rng().gen_range(1..=100);
+    //Selects difficulty
     let difficulty = get_input("Select difficulty: ");
     let difficulty = difficulty.trim();
     let mut attempts = match difficulty {

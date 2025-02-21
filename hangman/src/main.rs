@@ -5,6 +5,7 @@ fn main() {
     use hangman_art::*;
     println!("{}", LOGO);
     let mut lives = 6;
+    // Selects the word to guess
     let mut rng = rand::thread_rng();
     let word = hangman_words::WORD_LIST
         .choose(&mut rng)
