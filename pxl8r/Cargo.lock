@@ -6,6 +6,7 @@ version = 4
 name = "Pxl8r"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "image",
 ]
 
