@@ -1,9 +1,8 @@
 mod edit_options;
 mod palettes;
-use edit_options::{get_input, resize, dither1, dither2};
+use edit_options::*;
 use image::ImageReader;
 use anyhow::Context;
-
 fn main() -> anyhow::Result<()> {
     let image_path = get_input("Enter the path to the image: ");
     let image = ImageReader::open(&image_path)
