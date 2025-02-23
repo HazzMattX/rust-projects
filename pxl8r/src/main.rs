@@ -1,5 +1,5 @@
 mod edit_options;
-mod palettes;
+mod palette_mapping;
 use edit_options::*;
 use image::ImageReader;
 use anyhow::Context;
@@ -13,8 +13,18 @@ fn main() -> anyhow::Result<()> {
     let edit_options = get_input("Enter the edit options: ");
     match edit_options.as_str() {
         "resize" => { resize(&image)?; },
-        "dither1" => { dither1(&image)?; },
-        "dither2" => { dither2(&image)?; },
+        "dither" => {
+                    let mode = get_input("Choose dither mode: (basic/full): ");
+                    let dither_mode = match mode.as_str() {
+                        "basic" => DitherMode::Basic,
+                        "full" => DitherMode::Full,
+                        _ => {
+                            println!("Invalid option. Defaulting to 'basic'.");
+                            DitherMode::Basic
+                        }
+                    };
+                    dither(&image, dither_mode)?;
+                },
         _ => { }
     };
     println!("New image successfully created");
