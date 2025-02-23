@@ -1,4 +1,5 @@
 use crate::palette_mapping::palette_mapping::*;
+use crate::palette_mapping::palettes::*;
 use image::{DynamicImage, GenericImageView, ExtendedColorType};
 use image::imageops::FilterType::Nearest;
 use std::io::Write;
@@ -18,7 +19,9 @@ pub fn dither(image: &image::DynamicImage, mode: DitherMode) -> anyhow::Result<D
     let palette_choice = get_input("Choose palette: ");
     let palette = match palette_choice.trim() {
         "1" => &PALETTE1,
-        _ => &PALETTE2,
+        "2" => &PALETTE2,
+        "3" => &PALETTE3,
+        _ => &PALETTE1,
     };
     for y in 0..height {
         for x in 0..width {

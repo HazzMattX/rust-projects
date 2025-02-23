@@ -1,42 +1,4 @@
 use std::f32::INFINITY;
-use once_cell::sync::Lazy;
-pub static PALETTE1: Lazy<Vec<Color>> = Lazy::new(|| vec![
-    Color::from(0x000000),
-    Color::from(0xf50f27),
-    Color::from(0xf56c3f),
-    Color::from(0xffffff),
-    Color::from(0x004785),
-    Color::from(0x0395b1),
-    Color::from(0x36eb8f),
-    Color::from(0xabffa8),
-    Color::from(0x8f2700),
-    Color::from(0xff8f15),
-    Color::from(0xffec3c),
-    Color::from(0xe3fdaf),
-    Color::from(0x2d006a),
-    Color::from(0x0003f5),
-    Color::from(0x6ed1f5),
-    Color::from(0xadffca),
-]);
-pub static PALETTE2: Lazy<Vec<Color>> = Lazy::new(|| vec![
-    Color::from(0xf2c0a2),
-    Color::from(0xe98472),
-    Color::from(0xd82323),
-    Color::from(0x98183c),
-    Color::from(0x1fcb23),
-    Color::from(0x126d30),
-    Color::from(0x26dddd),
-    Color::from(0x1867a0),
-    Color::from(0x934226),
-    Color::from(0x6c251e),
-    Color::from(0xf7e26c),
-    Color::from(0xedb329),
-    Color::from(0xe76d14),
-    Color::from(0xf2f2f9),
-    Color::from(0x6a5fa0),
-    Color::from(0x161423),
-]);
-
 pub struct Color {
     pub(crate) r: u8,
     pub(crate) g: u8,
