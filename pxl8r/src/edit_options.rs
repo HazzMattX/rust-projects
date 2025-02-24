@@ -50,6 +50,10 @@ pub fn dither(image: &image::DynamicImage, mode: DitherMode) -> anyhow::Result<D
                 };
                 match mode {
                     DitherMode::Full => {
+                        let dithering_matrices = get_dithering_matrices();
+                        let selected_dither = get_input("Choose dithering type: ");
+                        let dither_matrix = dithering_matrices.get(selected_dither.trim())
+                            .unwrap_or(&dithering_matrices["floyd"]); // Default to Floyd-Steinberg
                         let (new_color, qe) = map_to_palette2(pixel, &palette);
                         buffer[i] = new_color.r;
                         buffer[i + 1] = new_color.g;
