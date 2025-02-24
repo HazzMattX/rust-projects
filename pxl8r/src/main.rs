@@ -1,5 +1,6 @@
 mod edit_options;
 mod palette_mapping;
+mod dither_matrices;
 use edit_options::*;
 use image::ImageReader;
 use anyhow::Context;
@@ -9,7 +10,6 @@ fn main() -> anyhow::Result<()> {
         .context(format!("Failed to open image: {}", image_path))?
         .decode()
         .context(format!("Failed to decode image: {}", image_path))?;
-
     let edit_options = get_input("Enter the edit options: ");
     match edit_options.as_str() {
         "resize" => { resize(&image)?; },

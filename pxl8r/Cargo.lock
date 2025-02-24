@@ -9,6 +9,7 @@ dependencies = [
  "anyhow",
  "image",
  "once_cell",
+ "rayon",
 ]
 
 [[package]]

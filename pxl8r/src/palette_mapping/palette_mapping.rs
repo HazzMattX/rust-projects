@@ -18,15 +18,6 @@ impl From<u32> for Color {
         }
     }
 }
-impl From<&[u8; 3]> for Color {
-    fn from(value: &[u8; 3]) -> Self {
-        Color {
-            b: value[0],
-            g: value[1],
-            r: value[2],
-        }
-    }
-}
 pub fn map_to_palette2(orig: Color, palette: &Vec<Color>) -> (Color, QuantizationError) {
     let mut closest = &palette[0];
     let mut min_distance = INFINITY;
@@ -48,15 +39,15 @@ pub fn map_to_palette2(orig: Color, palette: &Vec<Color>) -> (Color, Quantizatio
 }
 pub fn map_to_palette1(orig: Color, palette: &Vec<Color>) -> Color {
     let mut closest = &palette[0];
-    let mut min_distance = INFINITY;
-    for color in palette {
-        let distance = (orig.r as f32 - color.r as f32).powi(2) +
-                       (orig.g as f32 - color.g as f32).powi(2) +
-                       (orig.b as f32 - color.b as f32).powi(2);
-        if distance < min_distance {
-            closest = color;
-            min_distance = distance;
+        let mut min_distance = INFINITY;
+        for color in palette {
+            let distance = (orig.r as f32 - color.r as f32).powi(2) +
+                           (orig.g as f32 - color.g as f32).powi(2) +
+                           (orig.b as f32 - color.b as f32).powi(2);
+            if distance < min_distance {
+                closest = color;
+                min_distance = distance;
+            }
         }
-    }
     Color { r: closest.r, g: closest.g, b: closest.b }
 }
