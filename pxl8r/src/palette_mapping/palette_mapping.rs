@@ -18,7 +18,7 @@ impl From<u32> for Color {
         }
     }
 }
-pub fn map_to_palette2(orig: Color, palette: &Vec<Color>) -> (Color, QuantizationError) {
+pub fn map_to_palette2(orig: Color, palette: &'static[Color]) -> (Color, QuantizationError) {
     let mut closest = &palette[0];
     let mut min_distance = INFINITY;
     for color in palette {
@@ -37,7 +37,7 @@ pub fn map_to_palette2(orig: Color, palette: &Vec<Color>) -> (Color, Quantizatio
     };
     (Color { r: closest.r, g: closest.g, b: closest.b }, qe)
 }
-pub fn map_to_palette1(orig: Color, palette: &Vec<Color>) -> Color {
+pub fn map_to_palette1(orig: Color, palette: &'static[Color]) -> Color {
     let mut closest = &palette[0];
         let mut min_distance = INFINITY;
         for color in palette {

@@ -1,6 +1,17 @@
+use std::collections::HashMap;
 use once_cell::sync::Lazy;
 use super::palette_mapping::Color;
-pub static PALETTE1: Lazy<Vec<Color>> = Lazy::new(|| vec![
+static PALETTE: Lazy<HashMap<&'static str, &'static [Color]>> = Lazy::new(|| {
+    let mut palette_library = HashMap::new();
+    palette_library.insert("p1", PALETTE1.as_slice());
+    palette_library.insert("p2", PALETTE2.as_slice());
+    palette_library.insert("p3", PALETTE3.as_slice());
+    palette_library
+});
+pub fn get_palette(name: &str) -> &'static [Color] {
+    PALETTE.get(name).unwrap_or(&PALETTE1.as_slice())
+}
+static PALETTE1: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x000000),
     Color::from(0xf50f27),
     Color::from(0xf56c3f),
@@ -18,7 +29,7 @@ pub static PALETTE1: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x6ed1f5),
     Color::from(0xadffca),
 ]);
-pub static PALETTE2: Lazy<Vec<Color>> = Lazy::new(|| vec![
+static PALETTE2: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0xf2c0a2),
     Color::from(0xe98472),
     Color::from(0xd82323),
@@ -36,7 +47,7 @@ pub static PALETTE2: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x6a5fa0),
     Color::from(0x161423),
 ]);
-pub static PALETTE3: Lazy<Vec<Color>> = Lazy::new(|| vec![
+static PALETTE3: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x533c43),
     Color::from(0x3b262a),
     Color::from(0x22161b),
