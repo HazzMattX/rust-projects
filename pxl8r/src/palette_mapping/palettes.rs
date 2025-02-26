@@ -6,6 +6,7 @@ static PALETTE: Lazy<HashMap<&'static str, &'static [Color]>> = Lazy::new(|| {
     palette_library.insert("p1", PALETTE1.as_slice());
     palette_library.insert("p2", PALETTE2.as_slice());
     palette_library.insert("p3", PALETTE3.as_slice());
+    palette_library.insert("nes", NES.as_slice());
     palette_library
 });
 pub fn get_palette(name: &str) -> &'static [Color] {
@@ -61,4 +62,60 @@ static PALETTE3: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x585c61),
     Color::from(0x453e4a),
     Color::from(0x382832),
+]);
+static NES: Lazy<Vec<Color>> = Lazy::new(|| vec![
+    Color::from(0x000000),
+    Color::from(0x010101),
+    Color::from(0x797979),
+    Color::from(0xa2a2a2),
+    Color::from(0x305182),
+    Color::from(0x4192c3),
+    Color::from(0x61d3e3),
+    Color::from(0xa2fff3),
+    Color::from(0x306141),
+    Color::from(0x49a269),
+    Color::from(0x71e392),
+    Color::from(0xa2ffcb),
+    Color::from(0x386d00),
+    Color::from(0x49aa10),
+    Color::from(0x71f341),
+    Color::from(0xa2f3a2),
+    Color::from(0x396e01),
+    Color::from(0x51a200),
+    Color::from(0x9aeb00),
+    Color::from(0xcbf382),
+    Color::from(0x495900),
+    Color::from(0x8a8a00),
+    Color::from(0xebd320),
+    Color::from(0xfff392),
+    Color::from(0x794100),
+    Color::from(0xc37100),
+    Color::from(0xffa200),
+    Color::from(0xffdba2),
+    Color::from(0xa23000),
+    Color::from(0xe35100),
+    Color::from(0xff7930),
+    Color::from(0xffcbba),
+    Color::from(0xb21030),
+    Color::from(0xdb4161),
+    Color::from(0xff61b2),
+    Color::from(0xffbaeb),
+    Color::from(0x9a2079),
+    Color::from(0xdb41c3),
+    Color::from(0xf361ff),
+    Color::from(0xe3b2ff),
+    Color::from(0x6110a2),
+    Color::from(0x9241f3),
+    Color::from(0xa271ff),
+    Color::from(0xc3b2ff),
+    Color::from(0x2800ba),
+    Color::from(0x4141ff),
+    Color::from(0x5182ff),
+    Color::from(0xa2baff),
+    Color::from(0x2000b2),
+    Color::from(0x4161fb),
+    Color::from(0x61a2ff),
+    Color::from(0x92d3ff),
+    Color::from(0xb2b2b2),
+    Color::from(0xebebeb)
 ]);
