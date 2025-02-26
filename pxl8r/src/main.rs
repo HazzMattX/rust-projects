@@ -10,9 +10,11 @@ fn main() -> anyhow::Result<()> {
         .context(format!("Failed to open image: {}", image_path))?
         .decode()
         .context(format!("Failed to decode image: {}", image_path))?;
+    let rgb_image = image.to_rgb8();
+    let (width, height) = rgb_image.dimensions();
     let edit_options = get_input("Enter the edit options: ");
-    match edit_options.as_str() {
-        "resize" => { resize(&image)?; },
+    let rgb_image = match edit_options.as_str() {
+        "resize" => resize(&rgb_image, width, height)?,
         "dither" => {
                     let mode = get_input("Choose dither mode: (basic/full): ");
                     let dither_mode = match mode.as_str() {
@@ -23,10 +25,15 @@ fn main() -> anyhow::Result<()> {
                             DitherMode::Basic
                         }
                     };
-                    dither(&image, dither_mode)?;
+                    dither(&rgb_image, dither_mode, width, height)?
                 },
-        _ => { }
+        "crt" => crt_mode(&rgb_image, width, height)?,
+        _ => rgb_image
     };
+    let output_path = get_input("Enter the output path: ");
+    let output_image = image::RgbImage::from_vec(width, height, rgb_image.into_vec())
+        .context("Failed to create output image")?;
+    output_image.save(&output_path).context(format!("Failed to save image: {}", output_path))?;
     println!("New image successfully created");
     Ok(())
 }
