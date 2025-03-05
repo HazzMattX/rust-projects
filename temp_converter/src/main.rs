@@ -1,5 +1,28 @@
 use std::io::Write;
 use TemperatureScale::*;
+fn main() {
+    let number: f64 = get_input("Please enter a number\n")
+    .trim().parse().unwrap_or(0.0);
+let scale;
+// Chooses conversion
+use TemperatureScale::*;
+let convert = get_input("Choose temperature unit\n");
+let convert: TemperatureScale = match convert.trim() {
+    "1" => { scale = "Fahrenheit".to_string(); CelsiusToFahrenheit },
+    "2" => { scale = "Kelvin".to_string(); CelsiusToKelvin },
+    "3" => { scale = "Celsius".to_string(); FahrenheitToCelsius },
+    "4" => { scale = "Kelvin".to_string(); FahrenheitToKelvin },
+    "5" => { scale = "Celsius".to_string(); KelvinToCelsius },
+    "6" => { scale = "Fahrenheit".to_string(); KelvinToFahrenheit },
+    _ => {
+        println!("Invalid input, defaulting to Celsius to Fahrenheit.");
+        scale = "Fahrenheit".to_string();
+        CelsiusToFahrenheit
+    }
+};
+    let result = convert_temperature(number, convert);
+    println!("It is {} degrees {}", result, scale);
+}
 enum TemperatureScale {
     CelsiusToFahrenheit,
     CelsiusToKelvin,
@@ -24,27 +47,4 @@ fn get_input(prompt: &str) -> String {
     let mut input = String::new();
     std::io::stdin().read_line(&mut input).unwrap();
     input.trim().to_string()
-}
-fn main() {
-    let number: f64 = get_input("Please enter a number\n")
-    .trim().parse().unwrap_or(0.0);
-let scale;
-// Chooses conversion
-use TemperatureScale::*;
-let convert = get_input("Choose temperature unit\n");
-let convert: TemperatureScale = match convert.trim() {
-    "1" => { scale = "Fahrenheit".to_string(); CelsiusToFahrenheit },
-    "2" => { scale = "Kelvin".to_string(); CelsiusToKelvin },
-    "3" => { scale = "Celsius".to_string(); FahrenheitToCelsius },
-    "4" => { scale = "Kelvin".to_string(); FahrenheitToKelvin },
-    "5" => { scale = "Celsius".to_string(); KelvinToCelsius },
-    "6" => { scale = "Fahrenheit".to_string(); KelvinToFahrenheit },
-    _ => {
-        println!("Invalid input, defaulting to Celsius to Fahrenheit.");
-        scale = "Fahrenheit".to_string();
-        CelsiusToFahrenheit
-    }
-};
-    let result = convert_temperature(number, convert);
-    println!("It is {} degrees {}", result, scale);
 }

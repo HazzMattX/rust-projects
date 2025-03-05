@@ -1,7 +1,6 @@
 mod coffee_maker;mod money;mod menu;
 use coffee_maker::*;use money::*;use menu::MENU;
 use serde_json::Value;
-
 fn main() {
     let mut is_on = true;
     while is_on {

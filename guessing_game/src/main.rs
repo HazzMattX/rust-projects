@@ -1,5 +1,8 @@
 use rand::Rng;
 use std::io::Write;
+fn main() {
+    play_game();
+}
 fn get_input(prompt: &str) -> String {
     print!("{}", prompt);
     std::io::stdout().flush().unwrap();
@@ -49,7 +52,4 @@ fn play_game() {
         "yes" => play_game(),
         _ => println!("Bye bye"),
     }
-}
-fn main() {
-    play_game();
 }

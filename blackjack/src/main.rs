@@ -3,6 +3,9 @@ mod deck;
 mod score;
 use deck::deal_cards;
 use score::{calculate_score, compare};
+fn main() {
+    play_game();
+}
 fn play_game() {
     // Initialize game variables
     let mut user_cards = Vec::new();
@@ -67,7 +70,4 @@ fn play_game() {
     } else {
         println!("Thanks for playing!");
     }
-}
-fn main() {
-    play_game();
 }
