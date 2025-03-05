@@ -5,7 +5,7 @@ static PALETTE: Lazy<HashMap<&'static str, &'static [Color]>> = Lazy::new(|| {
     let mut palette_library = HashMap::new();
     palette_library.insert("p1", PALETTE1.as_slice());
     palette_library.insert("p2", PALETTE2.as_slice());
-    palette_library.insert("p3", PALETTE3.as_slice());
+    palette_library.insert("menace", MENACING_SKY.as_slice());
     palette_library.insert("nes", NES.as_slice());
     palette_library
 });
@@ -48,7 +48,7 @@ static PALETTE2: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x6a5fa0),
     Color::from(0x161423),
 ]);
-static PALETTE3: Lazy<Vec<Color>> = Lazy::new(|| vec![
+static MENACING_SKY: Lazy<Vec<Color>> = Lazy::new(|| vec![
     Color::from(0x533c43),
     Color::from(0x3b262a),
     Color::from(0x22161b),

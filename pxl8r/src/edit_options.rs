@@ -1,9 +1,9 @@
 use crate::dither_matrices::dither_matrices::get_dithering_matrices;
 use crate::palette_mapping::{palette_mapping::*, palettes::get_palette};
-use image::{DynamicImage, RgbImage};
-use image::imageops::FilterType::Nearest;
+use image::{DynamicImage, RgbImage, imageops::FilterType::Nearest};
 use rayon::prelude::*;
 use std::io::Write;
+use std::num::ParseIntError;
 use anyhow::Context;
 pub enum DitherMode {
     Basic,
@@ -22,12 +22,13 @@ fn scanlines(mut image: RgbImage, width: u32) -> RgbImage {
         });
     image
 }
-fn apply_chromatic_aberration(image: &mut RgbImage, shift: i32, width: u32, height: u32) -> RgbImage {
+pub fn apply_chromatic_aberration(image: &mut RgbImage, shift: Result<i32, ParseIntError>, width: u32, height: u32) -> RgbImage {
     let temp = image.clone();
+    let shift_value = shift.expect("Failed to parse shift value");
     for y in 0..height {
         for x in 0..width {
-            let r_offset = (x as i32).saturating_sub(shift).max(0) as u32;
-            let b_offset = (x as i32).saturating_add(shift).min(width as i32 - 1) as u32;
+            let r_offset = (x as i32).saturating_sub(shift_value).max(0) as u32;
+            let b_offset = (x as i32).saturating_add(shift_value).min(width as i32 - 1) as u32;
             let r_pixel = temp.get_pixel(r_offset, y);
             let b_pixel = temp.get_pixel(b_offset, y);
             let g_pixel = temp.get_pixel(x, y);
@@ -51,8 +52,8 @@ fn apply_crt_warp(image: &mut RgbImage, warp_strength: f32, width: u32, height: 
 }
 pub fn crt_mode(image: &RgbImage, width: u32, height: u32) -> anyhow::Result<RgbImage> {
     let rgb_image = scanlines(image.clone(), width);
-    let shift = get_input("Enter the shift value: ").parse::<i32>()
-        .context("Failed to parse shift value as integer")?;
+    let shift = Ok(get_input("Enter the shift value: ").parse::<i32>()
+        .context("Failed to parse shift value as integer")?);
     let mut rgb_image = apply_chromatic_aberration(&mut rgb_image.clone(), shift, width, height);
     let warp_strength = get_input("Choose warp strength: ").parse::<f32>()
         .context("Failed to parse warp strength as float")?;
