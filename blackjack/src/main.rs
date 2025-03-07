@@ -1,7 +1,6 @@
-#![allow(warnings)]
 mod deck;
 mod score;
-use deck::deal_cards;
+use deck::{Deck, deal_cards};
 use score::{calculate_score, compare};
 fn main() {
     play_game();
@@ -10,8 +9,9 @@ fn play_game() {
     // Initialize game variables
     let mut user_cards = Vec::new();
     let mut dealer_cards = Vec::new();
-    user_cards.extend(deal_cards(2));
-    dealer_cards.extend(deal_cards(2));
+    let mut deck = Deck::deck();
+    user_cards.extend(deal_cards(&mut deck, 2));
+    dealer_cards.extend(deal_cards(&mut deck, 2));
     let mut dealer_score: u8;
     let mut user_score: u8;
     let mut playing = true;
@@ -33,8 +33,8 @@ fn play_game() {
                 .expect("Failed to read line");
             let hit_or_stand = hit_or_stand.trim();
             if hit_or_stand == "y" {
-                user_cards.extend(deal_cards(1));
-                user_score = calculate_score(&mut user_cards);
+                user_cards.extend(deal_cards(&mut deck, 1));
+                user_cards.extend(deal_cards(&mut deck, 1));
                 if user_score < 22 {
                     playing = true;
                 } else if user_score > 21 {
@@ -45,8 +45,8 @@ fn play_game() {
             }
             if hit_or_stand == "n" {
                 while dealer_score != 0 && dealer_score < 17 {
-                    dealer_cards.extend(deal_cards(1));
-                    dealer_score = calculate_score(&mut dealer_cards);
+                    dealer_cards.extend(deal_cards(&mut deck, 1));
+                    dealer_cards.extend(deal_cards(&mut deck, 1));
                 }
             }
         }
@@ -71,3 +71,4 @@ fn play_game() {
         println!("Thanks for playing!");
     }
 }
+

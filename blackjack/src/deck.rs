@@ -2,6 +2,7 @@
 use rand::seq::SliceRandom;
 
 #[derive(Debug)]
+
 struct Card {
     value: u8,
     suit: String,
@@ -11,28 +12,34 @@ impl Card {
         Card { value, suit }
     }
 }
-fn new_deck() -> Vec<Card> {
-    let suits = vec!["Hearts", "Diamonds", "Clubs", "Spades"];
-    let mut deck = Vec::new();
-    for suit in suits {
-        for value in 2..11 {
-            deck.push(Card::new(value, suit.to_string()));
-        }
-        // Face cards
-        deck.push(Card::new(10, format!("Jack of {}", suit)));
-        deck.push(Card::new(10, format!("Queen of {}", suit)));
-        deck.push(Card::new(10, format!("King of {}", suit)));
-        deck.push(Card::new(11, format!("Ace of {}", suit))); // Ace starts at 11
-    }
-    deck
+pub struct Deck {
+    cards: Vec<Card>,
 }
-pub fn deal_cards(num_cards: usize) -> Vec<u8> {
-    let mut deck = new_deck();
-    let mut rng = rand::thread_rng();
+impl Deck {
+    pub fn deck() -> Deck {
+        let suits = vec!["Hearts", "Diamonds", "Clubs", "Spades"];
+        let mut cards = Deck { cards: Vec::new()};
+        for suit in suits {
+            for value in 2..11 {
+                cards.cards.push(Card::new(value, suit.to_string()));
+            }
+            // Face cards
+            cards.cards.push(Card::new(10, format!("Jack of {}", suit)));
+            cards.cards.push(Card::new(10, format!("Queen of {}", suit)));
+            cards.cards.push(Card::new(10, format!("King of {}", suit)));
+            cards.cards.push(Card::new(11, format!("Ace of {}", suit))); // Ace starts at 11
+        }
+        let mut rng = rand::thread_rng();
+        cards.cards.shuffle(&mut rng);
+        Deck { cards: cards.cards }
+    }
+}
+pub fn deal_cards(deck: &mut Deck, num_cards: usize) -> Vec<u8> {
     let mut hand = Vec::new();
     for _ in 0..num_cards {
-        if let Some(card) = deck.choose_mut(&mut rng) {
+        if let Some(card) = deck.cards.pop() {
             hand.push(card.value);
+            println!("{}", deck.cards.len());
         }
     }
     hand

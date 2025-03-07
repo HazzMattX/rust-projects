@@ -16,8 +16,8 @@ pub fn compare(your_score: u8, house_score: u8) -> &'static str {
     match (your_score, house_score) {
         (0, _) => "Blackjack! You win!",
         (_, 0) => "Dealer has Blackjack! You lose!",
-        (ys, hs) if ys > 21 => "You bust! You lose!",
-        (ys, hs) if hs > 21 => "Dealer bust! You win!",
+        (ys, _) if ys > 21 => "You bust! You lose!",
+        (_, hs) if hs > 21 => "Dealer bust! You win!",
         (ys, hs) if ys > hs => "You win!",
         (ys, hs) if ys < hs => "Dealer wins!",
         _ => "Draw",
