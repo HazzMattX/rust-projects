@@ -1,8 +1,7 @@
 // Creates a deck of cards for a blackjack game.
 use rand::seq::SliceRandom;
-
+const SUITS: [&str; 4] = ["Hearts", "Diamonds", "Clubs", "Spades"];
 #[derive(Debug)]
-
 struct Card {
     value: u8,
     suit: String,
@@ -17,9 +16,8 @@ pub struct Deck {
 }
 impl Deck {
     pub fn deck() -> Deck {
-        let suits = vec!["Hearts", "Diamonds", "Clubs", "Spades"];
         let mut cards = Deck { cards: Vec::new()};
-        for suit in suits {
+        for suit in SUITS {
             for value in 2..11 {
                 cards.cards.push(Card::new(value, suit.to_string()));
             }
