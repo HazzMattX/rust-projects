@@ -1,19 +1,17 @@
 mod deck;
 mod score;
-use deck::{Deck, deal_cards};
-use score::{calculate_score, compare};
-
+use deck::deal_cards;
+use score::*;
 fn main() {
-    let mut deck = Deck::deck();
-    play_game(&mut deck);
+    play_game();
 }
-
-fn play_game(deck: &mut Deck) {
+fn play_game() {
     // Initialize game variables
+    let mut deck = deck::Deck::new_deck();
     let mut user_cards = Vec::new();
     let mut dealer_cards = Vec::new();
-    user_cards.extend(deal_cards(deck, 2));
-    dealer_cards.extend(deal_cards(deck, 2));
+    user_cards.extend(deal_cards(&mut deck, 2));
+    dealer_cards.extend(deal_cards(&mut deck, 2));
     let mut dealer_score: u8;
     let mut user_score: u8;
     let mut playing = true;
@@ -28,14 +26,9 @@ fn play_game(deck: &mut Deck) {
         if user_score == 0 || dealer_score == 0 {
             playing = false;
         } else {
-            println!("Hit or stand? Type 'y' to hit or 'n' to stand");
-            let mut hit_or_stand = String::new();
-            std::io::stdin()
-                .read_line(&mut hit_or_stand)
-                .expect("Failed to read line");
-            let hit_or_stand = hit_or_stand.trim();
+            let hit_or_stand = get_input("Hit or stand? Type 'y' to hit or 'n' to stand");
             if hit_or_stand == "y" {
-                user_cards.extend(deal_cards(deck, 1));
+                user_cards.extend(deal_cards(&mut deck, 1));
                 user_score = calculate_score(&mut user_cards);
                 if user_score < 22 {
                     playing = true;
@@ -47,7 +40,7 @@ fn play_game(deck: &mut Deck) {
             }
             if hit_or_stand == "n" {
                 while dealer_score != 0 && dealer_score < 17 {
-                    dealer_cards.extend(deal_cards(deck, 1));
+                    dealer_cards.extend(deal_cards(&mut deck, 1));
                     dealer_score = calculate_score(&mut dealer_cards);
                 }
             }
@@ -61,16 +54,16 @@ fn play_game(deck: &mut Deck) {
             println!("{:?}", compare(user_score, dealer_score));
         }
     }
-    println!("Game over! Do you want to play again? Type 'y' to play again or 'n' to exit");
-    let mut play_again = String::new();
-    std::io::stdin()
-        .read_line(&mut play_again)
-        .expect("Failed to read line");
-    let play_again = play_again.trim();
+    let play_again = get_input("Game over! Do you want to play again? Type 'y' to play again or 'n' to exit");
     if play_again == "y" {
-        play_game(deck);
+        play_game();
     } else {
         println!("Thanks for playing!");
     }
 }
-
+fn get_input(prompt: &str) -> String {
+    println!("{}", prompt);
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).expect("Failed to read line");
+    input.trim().to_string()
+}

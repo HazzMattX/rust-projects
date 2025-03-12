@@ -1,16 +1,32 @@
-// This page calculates and compares the scores of a blackjack game.
-pub fn calculate_score(cards: &mut Vec<u8>) -> u8 {
-    if cards.iter().sum::<u8>() == 21 && cards.len() == 2 {
-        // Blackjack! You win!
-        return 0;
-    }
-    if cards.contains(&11) && cards.iter().sum::<u8>() > 21 {
-        // Convert the first ace to a 1 if the sum is over 21
-        if let Some(pos) = cards.iter().position(|&x| x == 11) {
-            cards[pos] = 1;
+use crate::deck::{Card, Rank};
+pub fn calculate_score(cards: &Vec<Card>) -> u8 {
+    let mut score = 0;
+    let mut aces = 0;
+    for card in cards {
+        match card.rank {
+            Rank::Two => score += 2,
+            Rank::Three => score += 3,
+            Rank::Four => score += 4,
+            Rank::Five => score += 5,
+            Rank::Six => score += 6,
+            Rank::Seven => score += 7,
+            Rank::Eight => score += 8,
+            Rank::Nine => score += 9,
+            Rank::Ten | Rank::Jack | Rank::Queen | Rank::King => score += 10,
+            Rank::Ace => {
+                score += 11;
+                aces += 1;
+            }
         }
     }
-    cards.iter().sum::<u8>()
+    while score > 21 && aces > 0 {
+        score -= 10;
+        aces -= 1;
+    }
+    if score == 21 && cards.len() == 2 {
+        return 0; // Blackjack
+    }
+    score
 }
 pub fn compare(your_score: u8, house_score: u8) -> &'static str {
     match (your_score, house_score) {
