@@ -1,4 +1,33 @@
 use crate::deck::{Card, Rank};
+#[derive(Debug, Clone, Copy)]
+pub enum GameResult {
+    PlayerBlackjack,
+    DealerBlackjack,
+    PlayerBust,
+    DealerBust,
+    PlayerWin,
+    DealerWin,
+    Draw,
+}
+impl GameResult {
+    pub fn to_string(&self) -> &'static str {
+        match self {
+            GameResult::PlayerBlackjack => "Player Blackjack",
+            GameResult::DealerBlackjack => "Dealer Blackjack",
+            GameResult::PlayerBust => "Player Bust",
+            GameResult::DealerBust => "Dealer Bust",
+            GameResult::PlayerWin => "Player Win",
+            GameResult::DealerWin => "Dealer Win",
+            GameResult::Draw => "Draw",
+        }
+    }
+    pub fn player_wins(&self) -> bool {
+        matches!(self, GameResult::PlayerBlackjack | GameResult::PlayerWin | GameResult::DealerBust)
+    }
+    pub fn dealer_wins(&self) -> bool {
+        matches!(self, GameResult::DealerBlackjack | GameResult::DealerWin | GameResult::PlayerBust)
+    }
+}
 pub fn calculate_score(cards: &Vec<Card>) -> u8 {
     let mut score = 0;
     let mut aces = 0;
@@ -28,14 +57,15 @@ pub fn calculate_score(cards: &Vec<Card>) -> u8 {
     }
     score
 }
-pub fn compare(your_score: u8, house_score: u8) -> &'static str {
+pub fn compare(your_score: u8, house_score: u8) -> GameResult {
+    use GameResult::*;
     match (your_score, house_score) {
-        (0, _) => "Blackjack! You win!",
-        (_, 0) => "Dealer has Blackjack! You lose!",
-        (ys, _) if ys > 21 => "You bust! You lose!",
-        (_, hs) if hs > 21 => "Dealer bust! You win!",
-        (ys, hs) if ys > hs => "You win!",
-        (ys, hs) if ys < hs => "Dealer wins!",
-        _ => "Draw",
+        (0, _) => PlayerBlackjack,
+        (_, 0) => DealerBlackjack,
+        (ys, _) if ys > 21 => PlayerBust,
+        (_, hs) if hs > 21 => DealerBust,
+        (ys, hs) if ys > hs => PlayerWin,
+        (ys, hs) if ys < hs => DealerWin,
+        _ => Draw,
     }
 }
