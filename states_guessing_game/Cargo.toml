@@ -5,5 +5,5 @@ edition = "2024"
 
 [dependencies]
 csv = "1.3.1"
-egui = "0.31.0"
 image = "0.25.5"
+macroquad = "0.4.14"
