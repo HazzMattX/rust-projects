@@ -1,117 +1,18 @@
+mod player;
+mod blocks;
+mod ball;
+use ball::{Ball, BALL_SIZE};
+use blocks::{init_blocks, Block, BlockType};
+use player::Player;
 use macroquad::prelude::*;
-const PLAYER_SIZE: Vec2 = Vec2::new(150.0, 40.0);
-const PLAYER_SPEED: f32 = 700.0;
-const BLOCK_SIZE: Vec2 = Vec2::new(120.0, 40.0);
-const BALL_SIZE: Vec2 = Vec2::new(20.0, 20.0);
-const BALL_SPEED: f32 = 400.0;
+
 pub enum GameState {
     Menu,
     Game,
     Completed,
     GameOver,
 }
-// Defines the Player
-struct Player {
-    rect: Rect,
-}
-impl Player {
-    pub fn new() -> Self {
-        Self {
-            rect: Rect::new(screen_width() / 2.0, screen_height() - 100.0, PLAYER_SIZE.x, PLAYER_SIZE.y),
-        }
-    }
-    pub fn update(&mut self, dt: f32) {
-        let move_x = match (is_key_down(KeyCode::Left), is_key_down(KeyCode::Right)) {
-            (true, false) => -10.0,
-            (false, true) => 10.0,
-            _ => 0.0,
-        };
-        self.rect.x += move_x * dt * PLAYER_SPEED;
-        if self.rect.x < 0.0 {
-            self.rect.x = 0.0;
-        }
-        if self.rect.x + self.rect.w > screen_width() {
-            self.rect.x = screen_width() - self.rect.w;
-        }
-    }
-    pub fn draw(&self) {
-        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, BLACK);
-    }
-}
-#[derive(PartialEq)]
-pub enum BlockType {
-    Regular,
-    SpawnBallOnDeath, // Block spawns a ball when removed
-}
-struct Block {
-    rect: Rect,
-    lives: u8,
-    block_type: BlockType
-}
-impl Block {
-    pub fn new(pos: Vec2, block_type: BlockType) -> Self {
-            Self {
-                rect: Rect::new(pos.x, pos.y, BLOCK_SIZE.x, BLOCK_SIZE.y),
-                lives: 2,
-                block_type,
-            }
-        }
-    pub fn draw(&self) {
-        let color = match self.block_type {
-            BlockType::Regular =>
-                match self.lives {
-                2 => RED,
-                _ => ORANGE
-            },
-            BlockType::SpawnBallOnDeath => GREEN,
-        };
-        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, color);
-    }
-}
-fn init_blocks(blocks: &mut Vec<Block>) {
-    let (width, height) = (6, 6);
-    let padding = 5.0;
-    let total_block_size = BLOCK_SIZE + vec2(padding, padding);
-    let board_start_pos = vec2((screen_width() - total_block_size.x * width as f32) / 2.0 , 50.0);
-    for i in 0..width * height {
-        let block_x = (i % width) as f32 * total_block_size.x;
-        let block_y = (i / width) as f32 * total_block_size.y;
-        blocks.push(Block::new(board_start_pos + vec2(block_x, block_y), BlockType::Regular));
-    }
-    for _ in 0..3 {
-        let rand_index = rand::gen_range(0, blocks.len());
-        blocks[rand_index].block_type = BlockType::SpawnBallOnDeath;
-    }
-}
-// Defines the ball
-struct Ball {
-    rect: Rect,
-    speed: Vec2,
-}
-impl Ball {
-    fn new(pos: Vec2) -> Self {
-        Self {
-            rect: Rect::new(pos.x, pos.y, BALL_SIZE.x, BALL_SIZE.y),
-            speed: vec2(rand::gen_range(-1.0, 1.0), 1.0).normalize(),
-        }
-    }
-    pub fn update(&mut self, dt: f32) {
-        self.rect.x += self.speed.x * dt * BALL_SPEED;
-        self.rect.y += self.speed.y * dt * BALL_SPEED;
-        if self.rect.x < 0.0 {
-            self.speed.x = 1.0
-        }
-        if self.rect.x > screen_width() - self.rect.w {
-            self.speed.x = -1.0
-        }
-        if self.rect.y < 0.0 {
-            self.speed.y = 1.0
-        }
-    }
-    pub fn draw(&self) {
-        draw_rectangle(self.rect.x, self.rect.y, self.rect.w, self.rect.h, DARKGRAY);
-    }
-}
+
 fn collision_detection(a: &mut Rect, speed: &mut Vec2, b: Rect) -> bool {
     let intersection = match a.intersect(b) {
         Some(intersection) => intersection,
@@ -148,16 +49,16 @@ fn collision_detection(a: &mut Rect, speed: &mut Vec2, b: Rect) -> bool {
 fn reset_game(
     score: &mut i32,
     player_lives: &mut i32,
-    blocks: &mut Vec<Block>,
+    blocks: &mut Vec<blocks::Block>,
     balls: &mut Vec<Ball>,
-    player: &mut Player,
+    player: &mut player::Player,
 ) {
-    *player = Player::new();
+    *player = player::Player::new();
     *score = 0;
     *player_lives = 5;
     blocks.clear();
     balls.clear();
-    init_blocks(blocks);
+    blocks::init_blocks(blocks);
 }
 #[macroquad::main("Breakout")]
 async fn main() {
