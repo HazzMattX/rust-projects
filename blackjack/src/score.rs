@@ -10,7 +10,7 @@ pub enum GameResult {
     Draw,
 }
 impl GameResult {
-    pub fn to_string(&self) -> &'static str {
+    pub fn result(&self) -> &'static str {
         match self {
             GameResult::PlayerBlackjack => "Player Blackjack",
             GameResult::DealerBlackjack => "Dealer Blackjack",

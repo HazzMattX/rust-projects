@@ -58,9 +58,9 @@ fn play_game() {
 // Example of more descriptive messages
 fn display_result(result: GameResult) {
     if result.player_wins() {
-        println!("Congratulations! {}", result.to_string());
+        println!("Congratulations! {}", result.result());
     } else if result.dealer_wins() {
-        println!("Better luck next time. {}", result.to_string());
+        println!("Better luck next time. {}", result.result());
     } else {
         println!("It's a draw!");
     }

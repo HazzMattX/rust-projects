@@ -1,22 +1,24 @@
 mod player;
 mod blocks;
 mod ball;
+mod button_ui;
 use ball::{Ball, BALL_SIZE};
-use blocks::{init_blocks, Block, BlockType};
+use blocks::*;
+use button_ui::CustomButton;
 use player::Player;
 use macroquad::prelude::*;
-
-pub enum GameState {
+enum GameState {
     Menu,
     Game,
     Completed,
     GameOver,
 }
-
 fn collision_detection(a: &mut Rect, speed: &mut Vec2, b: Rect) -> bool {
     let intersection = match a.intersect(b) {
         Some(intersection) => intersection,
-        None => return false,
+        None => {
+            return false
+        },
     };
     let a_center = a.center();
     let b_center = b.center();
@@ -63,6 +65,8 @@ fn reset_game(
 #[macroquad::main("Breakout")]
 async fn main() {
     let font = load_ttf_font("font/Brexon-Regular.ttf").await.unwrap();
+    const BUTTON_SIZE: Vec2 = vec2(200.0, 50.0);
+    request_new_screen_size(1000.0, 600.0);
     let mut game_state = GameState::Menu;
     let mut score = 0;
     let mut player_lives = 5;
@@ -75,22 +79,37 @@ async fn main() {
         clear_background(WHITE);
         match game_state {
             GameState::Menu => {
-                let text = "Press SPACE to start";
+                let text = "BREAKOUT";
                 let dims = measure_text(text, Some(&font), 30, 1.0);
                 draw_text_ex(
                     text,
                     screen_width() / 2.0 - dims.width / 2.0,
-                    screen_height() / 2.0 - dims.height / 2.0,
-                    TextParams { font: Some(&font), font_size: 30, color: BLACK, ..Default::default() }
+                    100.0,
+                    TextParams { font: Some(&font), font_size: 70, color: BLACK, ..Default::default() }
                 );
-                if is_key_pressed(KeyCode::Space) {
+                let mut start_button = CustomButton::new(
+                    350.0,
+                    250.0,
+                    BUTTON_SIZE.x,
+                    BUTTON_SIZE.y,
+                    "Start Game",
+                    font.clone()
+                );
+                start_button.set_colors(Color::new(0.2, 0.6, 0.8, 1.0), // Normal color (blue)
+                                        Color::new(0.3, 0.7, 0.9, 1.0), // Hover color (lighter blue)
+                                        WHITE); // Text color
+                start_button.update();
+                start_button.draw();
+                if start_button.is_clicked() {
                     game_state = GameState::Game;
                     reset_game(&mut score, &mut player_lives, &mut blocks, &mut balls, &mut player);
                 }
             },
             GameState::Game => {
                 if is_key_pressed(KeyCode::Space) {
-                    balls.push(Ball::new(vec2(player.rect.x + player.rect.w/2.0 - BALL_SIZE.x/2.0, player.rect.y - BALL_SIZE.y)));
+                    balls.push(Ball::new(
+                        vec2(
+                            player.rect.x + player.rect.w/2.0 - BALL_SIZE.x/2.0, player.rect.y - BALL_SIZE.y)));
                 }
                 player.update(get_frame_time() / 4.0);
                 for ball in balls.iter_mut() {
@@ -101,8 +120,10 @@ async fn main() {
                     collision_detection(&mut ball.rect, &mut ball.speed, player.rect);
                     for block in blocks.iter_mut() {
                         if collision_detection(&mut ball.rect, &mut ball.speed, block.rect) {
-                            let spawn_ball = block.lives == 1 && matches!(block.block_type, BlockType::SpawnBallOnDeath);
-                            let ball_position = vec2(block.rect.x + block.rect.w/2.0 - BALL_SIZE.x/2.0, block.rect.y + block.rect.h/2.0);
+                            let spawn_ball = block.lives == 1 && matches!(
+                                block.block_type, BlockType::SpawnBallOnDeath);
+                            let ball_position = vec2(
+                                block.rect.x + block.rect.w/2.0 - BALL_SIZE.x/2.0, block.rect.y + block.rect.h/2.0);
                             block.lives -= 1;
                             score += 10;
                             if spawn_ball {
@@ -147,20 +168,39 @@ async fn main() {
                 );
             },
             GameState::Completed => {
-                let text = "You won! Press ESC to go to menu or SPACE to restart";
-                let dims = measure_text(text, Some(&font), 30, 1.0);
-                draw_text_ex(
-                    text,
-                    screen_width() / 2.0 - dims.width / 2.0,
-                    screen_height() / 2.0 - dims.height / 2.0,
-                    TextParams { font: Some(&font), font_size: 30, color: BLACK, ..Default::default() }
+                let mut restart_button = CustomButton::new(
+                    350.0,
+                    250.0,
+                    BUTTON_SIZE.x,
+                    BUTTON_SIZE.y,
+                    "Restart Game",
+                    font.clone()
                 );
-                if is_key_pressed(KeyCode::Space) {
+                restart_button.set_colors(Color::new(0.2, 0.6, 0.8, 1.0), // Normal color (blue)
+                                        Color::new(0.3, 0.7, 0.9, 1.0), // Hover color (lighter blue)
+                                        WHITE); // Text color
+                restart_button.update();
+                restart_button.draw();
+                if restart_button.is_clicked() {
                     game_state = GameState::Game;
                     reset_game(&mut score, &mut player_lives, &mut blocks, &mut balls, &mut player);
                 }
-                if is_key_pressed(KeyCode::Escape) {
-                    game_state = GameState::Menu;
+                let mut quit_button = CustomButton::new(
+                    350.0,
+                    250.0,
+                    BUTTON_SIZE.x,
+                    BUTTON_SIZE.y,
+                    "Quit Game",
+                    font.clone()
+                );
+                quit_button.set_colors(Color::new(0.2, 0.6, 0.8, 1.0), // Normal color (blue)
+                                        Color::new(0.3, 0.7, 0.9, 1.0), // Hover color (lighter blue)
+                                        WHITE); // Text color
+                quit_button.update();
+                quit_button.draw();
+                if quit_button.is_clicked() {
+                    game_state = GameState::Game;
+                    reset_game(&mut score, &mut player_lives, &mut blocks, &mut balls, &mut player);
                 }
             },
             GameState::GameOver => {
@@ -169,15 +209,42 @@ async fn main() {
                 draw_text_ex(
                     text,
                     screen_width() / 2.0 - dims.width / 2.0,
-                    screen_height() / 2.0 - dims.height / 2.0,
+                    100.0,
                     TextParams { font: Some(&font), font_size: 30, color: BLACK, ..Default::default() }
                 );
-                if is_key_pressed(KeyCode::Space) {
+                let mut restart_button = CustomButton::new(
+                    350.0,
+                    250.0,
+                    BUTTON_SIZE.x,
+                    BUTTON_SIZE.y,
+                    "Restart Game",
+                    font.clone()
+                );
+                restart_button.set_colors(Color::new(0.2, 0.6, 0.8, 1.0), // Normal color (blue)
+                                        Color::new(0.3, 0.7, 0.9, 1.0), // Hover color (lighter blue)
+                                        WHITE); // Text color
+                restart_button.update();
+                restart_button.draw();
+                if restart_button.is_clicked() {
                     game_state = GameState::Game;
                     reset_game(&mut score, &mut player_lives, &mut blocks, &mut balls, &mut player);
                 }
-                if is_key_pressed(KeyCode::Escape) {
-                    game_state = GameState::Menu;
+                let mut quit_button = CustomButton::new(
+                    350.0,
+                    250.0,
+                    BUTTON_SIZE.x,
+                    BUTTON_SIZE.y,
+                    "Quit Game",
+                    font.clone()
+                );
+                quit_button.set_colors(Color::new(0.2, 0.6, 0.8, 1.0), // Normal color (blue)
+                                        Color::new(0.3, 0.7, 0.9, 1.0), // Hover color (lighter blue)
+                                        WHITE); // Text color
+                quit_button.update();
+                quit_button.draw();
+                if quit_button.is_clicked() {
+                    game_state = GameState::Game;
+                    reset_game(&mut score, &mut player_lives, &mut blocks, &mut balls, &mut player);
                 }
             },
         }

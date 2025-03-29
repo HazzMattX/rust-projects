@@ -1,4 +1,5 @@
 use macroquad::prelude::*;
+
 const BLOCK_SIZE: Vec2 = Vec2::new(120.0, 40.0);
 #[derive(PartialEq)]
 pub enum BlockType {
@@ -31,7 +32,7 @@ impl Block {
     }
 }
 pub fn init_blocks(blocks: &mut Vec<Block>) {
-    let (width, height) = (6, 6);
+    let (width, height) = (7, 6);
     let padding = 5.0;
     let total_block_size = BLOCK_SIZE + vec2(padding, padding);
     let board_start_pos = vec2((screen_width() - total_block_size.x * width as f32) / 2.0 , 50.0);
