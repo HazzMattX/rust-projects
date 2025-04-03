@@ -1,8 +1,10 @@
 mod deck;
 mod score;
+mod funds;
 use std::io::{self, Write};
 use deck::deal_cards;
 use score::*;
+use funds::MONEY;
 fn main() {
     play_game();
 }

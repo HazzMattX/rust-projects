@@ -1,4 +1,5 @@
-use std::sync::Mutex;use once_cell::sync::Lazy;
+use std::sync::Mutex;
+use once_cell::sync::Lazy;
 pub static MONEY: Lazy<Mutex<f64>> = Lazy::new(|| Mutex::new(0.0));
 pub fn profit() {
     println!("Money: ${:.2}", MONEY.lock().unwrap());
