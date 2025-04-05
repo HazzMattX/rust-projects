@@ -1,0 +1,1 @@
+/Users/matthewdowd/GitHub/rust-projects/spaceassault/target/aarch64-apple-darwin/release/spaceassault: /Users/matthewdowd/GitHub/rust-projects/spaceassault/src/main.rs /Users/matthewdowd/GitHub/rust-projects/spaceassault/src/starfield-shader.glsl

@@ -1,0 +1,10 @@
+/Users/matthewdowd/GitHub/rust-projects/spaceassault/target/aarch64-apple-darwin/release/deps/libdasp_sample-f1d930f169c281f9.rmeta: /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/lib.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/conv.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/ops.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/types.rs
+
+/Users/matthewdowd/GitHub/rust-projects/spaceassault/target/aarch64-apple-darwin/release/deps/libdasp_sample-f1d930f169c281f9.rlib: /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/lib.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/conv.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/ops.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/types.rs
+
+/Users/matthewdowd/GitHub/rust-projects/spaceassault/target/aarch64-apple-darwin/release/deps/dasp_sample-f1d930f169c281f9.d: /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/lib.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/conv.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/ops.rs /Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/types.rs
+
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/lib.rs:
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/conv.rs:
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/ops.rs:
+/Users/matthewdowd/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/dasp_sample-0.11.0/src/types.rs:
