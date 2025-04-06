@@ -172,6 +172,7 @@ fn initialize_assets_path() {
         "src/assets",               // IDE/source directory
         "../assets",                // One directory up
         "./assets",                 // Explicitly in current dir
+        "target/aarch64-apple-darwin/release/assets",
     ];
 
     for path in possible_paths {
@@ -179,12 +180,11 @@ fn initialize_assets_path() {
             set_pc_assets_folder(path);
             println!("Assets loaded from: {}", path);
             return;
+        } else {
+            // If we get here, no path worked
+            eprintln!("WARNING: Could not find assets directory! Trying default path.");
         }
     }
-
-    // If we get here, no path worked
-    eprintln!("WARNING: Could not find assets directory! Trying default path.");
-    set_pc_assets_folder("assets"); // Try original as fallback
 }
 #[macroquad::main("Space Assault")]
 async fn main() -> Result<(), macroquad::Error> {
