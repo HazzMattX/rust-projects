@@ -1,0 +1,1 @@
+C:\Users\dowdm\Documents\GitHub\rust-projects\spaceassault\target\debug\spaceassault.exe: C:\Users\dowdm\Documents\GitHub\rust-projects\spaceassault\src\main.rs C:\Users\dowdm\Documents\GitHub\rust-projects\spaceassault\src\starfield-shader.glsl

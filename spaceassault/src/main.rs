@@ -337,20 +337,20 @@ async fn main() -> Result<(), macroquad::Error> {
             }
             GameState::Playing => {
                 let delta_time = get_frame_time();
-                if is_key_down(KeyCode::Right) {
+                if is_key_down(KeyCode::D) {
                     circle.x += MOVEMENT_SPEED * delta_time;
                     direction_modifier += 0.05 * delta_time;
                     ship_sprite.set_animation(2);
                 }
-                if is_key_down(KeyCode::Left) {
+                if is_key_down(KeyCode::A) {
                     circle.x -= MOVEMENT_SPEED * delta_time;
                     direction_modifier -= 0.05 * delta_time;
                     ship_sprite.set_animation(1);
                 }
-                if is_key_down(KeyCode::Down) {
+                if is_key_down(KeyCode::S) {
                     circle.y += MOVEMENT_SPEED * delta_time;
                 }
-                if is_key_down(KeyCode::Up) {
+                if is_key_down(KeyCode::W) {
                     circle.y -= MOVEMENT_SPEED * delta_time;
                 }
                 if is_key_pressed(KeyCode::Space) {
